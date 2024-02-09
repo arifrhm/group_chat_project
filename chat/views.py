@@ -47,9 +47,6 @@ def chat_room(request, room_id):
                    'message_form': message_form})
 
 
-
-
-
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)

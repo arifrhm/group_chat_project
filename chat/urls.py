@@ -10,7 +10,7 @@ from .views import (group_chat,
 urlpatterns = [
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
-    path('register/', user_register, name='register'),
+    path('register/', user_register, name='user_register'),
     path('group-chat/', group_chat, name='group_chat'),
     path('create-room/', create_room, name='create_room'),
     path('chat-room/<int:room_id>/', chat_room, name='chat_room'),

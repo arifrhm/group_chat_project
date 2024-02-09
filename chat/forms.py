@@ -20,7 +20,22 @@ class LoginForm(AuthenticationForm):
 
 
 class RegistrationForm(UserCreationForm):
-    # Add any additional fields or customization if needed
+    email = forms.EmailField(required=True)
+
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        # Check if the email is already in use
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email address is already in use.')
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        # Check if the username is already in use
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('This username is already in use.')
+        return username
