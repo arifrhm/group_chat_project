@@ -1,0 +1,12 @@
+<!-- chat/group_chat.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Group Chat</h2>
+    <ul>
+        {% for room in rooms %}
+            <li><a href="{% url 'chat_room' room_id=room.id %}">{{ room.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_room' %}">Create a Room</a>
+{% endblock %}

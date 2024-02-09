@@ -1,0 +1,17 @@
+<!-- chat/chat_room.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ room.name }}</h2>
+    <ul>
+        {% for message in messages %}
+            <li>{{ message.sender.username }}: {{ message.content }}</li>
+        {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'chat_room' room_id=room.id %}">
+        {% csrf_token %}
+        {{ message_form.as_p }}
+        <button type="submit">Send Message</button>
+    </form>
+{% endblock %}
+    

@@ -1,0 +1,34 @@
+<!-- base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Real-Time Chat{% endblock %}</title>
+
+    <!-- Link to Tailwind CSS (replace with the actual path) -->
+    <link rel="stylesheet" href="{% static 'chat/css/tailwind.min.css' %}">
+    <!-- Add more static file links as needed -->
+</head>
+<body class="font-sans">
+
+    <header class="bg-blue-500 p-4 text-white">
+        <h1 class="text-2xl font-bold">{% block header %}Real-Time Chat{% endblock %}</h1>
+        <!-- Add navigation or other header content -->
+    </header>
+
+    <main class="container mx-auto my-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center p-4 bg-gray-200">
+        <!-- Add footer content -->
+        &copy; 2024 Real-Time Chat
+    </footer>
+
+    <!-- Add script tags for JavaScript files if needed -->
+
+</body>
+</html>

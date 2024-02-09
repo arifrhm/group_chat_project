@@ -1,0 +1,4 @@
+Django
+channels
+celery
+psycopg2-binary
