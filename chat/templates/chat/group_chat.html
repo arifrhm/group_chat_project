@@ -2,11 +2,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Group Chat</h2>
-    <ul>
-        {% for room in rooms %}
-            <li><a href="{% url 'chat_room' room_id=room.id %}">{{ room.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'create_room' %}">Create a Room</a>
+    <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4">Group Chat</h2>
+        <ul class="grid gap-4">
+            {% for room in rooms %}
+                <li class="bg-white p-4 rounded-md shadow-md">
+                    <a href="{% url 'chat_room' room_id=room.id %}" class="text-blue-500 hover:underline">{{ room.name }}</a>
+                    <span class="ml-2">
+                        <a href="{% url 'rename_room' room_id=room.id %}" class="text-gray-500 hover:underline">Rename</a>
+                        <a href="{% url 'delete_room' room_id=room.id %}" class="text-red-500 hover:underline ml-2">Delete</a>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="mt-4">
+            <a href="{% url 'create_room' %}" class="text-green-500 hover:underline">Create a Room</a>
+        </div>
+    </div>
 {% endblock %}

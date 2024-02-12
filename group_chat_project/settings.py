@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-arc+n6b2xh=-cd!072m9x@rk-j$uz0c*z-58ezc$k*#fs^!2p-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -123,18 +123,18 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# settings.py
-
+# settings.py   
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    },
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
 
-# Replace 'chat' with your project name
 
-ASGI_APPLICATION = 'chat.routing.websocket_urlpatterns'
+# group_chat_project/settings.py
+ASGI_APPLICATION = 'group_chat_project.asgi.application'
 
 
 # Login Required redirect
 LOGIN_URL = '/chat/login/'
+LOGIN_REDIRECT_URL = "/chat/group-chat"  # new

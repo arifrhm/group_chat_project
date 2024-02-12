@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4">Delete Room</h2>
+        <p>Are you sure you want to delete the room "{{ room.name }}"?</p>
+        <form method="post" action="{% url 'delete_room' room_id=room.id %}" class="mt-4">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-500 text-white p-2 rounded-md">Delete Room</button>
+        </form>
+        <a href="{% url 'group_chat' %}" class="text-gray-500 hover:underline">Cancel</a>
+    </div>
+{% endblock %}

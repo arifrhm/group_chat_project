@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4">Rename Room</h2>
+        <form method="post" action="{% url 'rename_room' room_id=room.id %}" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Rename Room</button>
+        </form>
+    </div>
+{% endblock %}
