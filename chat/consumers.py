@@ -32,7 +32,6 @@ class ChatConsumer(WebsocketConsumer):
             message_content = text_data_json['message']
             sender_id = text_data_json['sender_id']
             room_id = text_data_json['room_id']
-            print(room_id)
             # Get the sender user instance
             sender = User.objects.get(id=sender_id)
 
@@ -48,7 +47,7 @@ class ChatConsumer(WebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'chat.message',
-                    'message': message_content
+                    'message': text_data_json
                 }
             )
         except json.JSONDecodeError:

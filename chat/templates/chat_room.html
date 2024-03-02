@@ -51,21 +51,20 @@
   chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     const messagesUl = document.getElementById("chat-messages");
-
     const li = document.createElement("li");
-    li.className = `flex flex-col items-start ${
-      data.sender_id === user
-        ? "justify-end items-end"
-        : "justify-start items-start"
+    li.className = `flex flex-col ${
+      data.message.sender_id === userId
+        ? "justify-end items-end" : "justify-start items-start"
+        
     }`;
     li.innerHTML = `
-                <span class="text-gray-500 text-sm mb-1">${user}</span>
-                <div class="${
-                  data.sender_id === user
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-800"
-                } p-2 rounded-md max-w-xs">${data.message}</div>
-            `;
+  <span class="text-gray-500 text-sm mb-1">${data.message.sender}</span>
+  <div class="${
+    data.message.sender_id === userId
+      ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+      
+  } p-2 rounded-md max-w-xs">${data.message.message}</div>
+`;
 
     messagesUl.appendChild(li);
   };
