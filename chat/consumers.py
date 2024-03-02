@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+from django.contrib.auth.models import User
+from chat.models import Message, Room
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -25,21 +27,37 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         try:
             text_data_json = json.loads(text_data)
-            message = text_data_json['message']
-        except json.JSONDecodeError:
-            # If JSON decoding fails, treat the entire text_data as the message
-            message = text_data
-        except KeyError:
-            print("Received data does not contain 'message' key")
-            return
+            message_content = text_data_json['message']
+            sender_id = text_data_json['sender_id']
+            room_id = text_data_json['room_id']
+            print(room_id)
+            # Get the sender user instance
+            sender = User.objects.get(id=sender_id)
 
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'chat.message',
-                'message': message
-            }
-        )
+            # Get the room instance
+            room = Room.objects.get(id=room_id)
+
+            # Create and save the message
+            message = Message(content=message_content,
+                              room=room, sender=sender)
+            message.save()
+
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'chat.message',
+                    'message': message_content
+                }
+            )
+        except json.JSONDecodeError:
+            print("Received data is not a valid JSON")
+        except KeyError:
+            print("Received data does not contain 'message'" +
+                  "or 'sender_id' or 'room_id' key")
+        except User.DoesNotExist:
+            print("Sender does not exist")
+        except Room.DoesNotExist:
+            print("Room does not exist")
 
     def chat_message(self, event):
         message = event['message']
