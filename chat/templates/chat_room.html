@@ -1,0 +1,87 @@
+<!-- chat/chat_room.html -->
+{% extends 'base.html' %} {% block content %}
+<div class="max-w-md mx-auto">
+  <h2 class="text-2xl font-bold mb-4">{{ room.name }}</h2>
+  <ul id="chat-messages" class="mb-4 space-y-2">
+    {% for message in messages %}
+    <li
+      class="flex flex-col items-start {% if message.sender == user %}justify-end items-end{% else %}justify-start items-start{% endif %}"
+    >
+      <span class="text-gray-500 text-sm mb-1"
+        >{{ message.sender.username }}</span
+      >
+      <div
+        class="{% if message.sender == user %}bg-blue-500 text-white{% else %}bg-gray-200 text-gray-800{% endif %} p-2 rounded-md max-w-xs"
+      >
+        {{ message.content }}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <form id="message-form" class="space-y-4">
+    {% csrf_token %}
+    <div class="flex items-start">
+      <input
+        type="text"
+        id="message-input"
+        class="border rounded-md p-2 w-full"
+        placeholder="Type your message..."
+      />
+      <button
+        type="button"
+        id="send-button"
+        class="bg-blue-500 text-white p-2 rounded-md ml-2"
+      >
+        Send
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const roomName = "{{ room.name }}";
+  const roomId = "{{ room.id }}";
+  const user = "{{ user.username }}";
+
+  const chatSocket = new WebSocket(
+    `ws://${window.location.host}/ws/chat/${roomId}/`
+  );
+
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    const messagesUl = document.getElementById("chat-messages");
+
+    const li = document.createElement("li");
+    li.className = `flex flex-col items-start ${
+      data.sender_id === user
+        ? "justify-end items-end"
+        : "justify-start items-start"
+    }`;
+    li.innerHTML = `
+                <span class="text-gray-500 text-sm mb-1">${user}</span>
+                <div class="${
+                  data.sender_id === user
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-800"
+                } p-2 rounded-md max-w-xs">${data.message}</div>
+            `;
+
+    messagesUl.appendChild(li);
+  };
+
+  document.getElementById("send-button").onclick = function () {
+    const messageInputDom = document.getElementById("message-input");
+    const message = messageInputDom.value;
+
+    chatSocket.send(
+      JSON.stringify({
+        sender: user,
+        room_id: roomId,
+        message: message,
+      })
+    );
+
+    messageInputDom.value = "";
+  };
+</script>
+{% endblock %}

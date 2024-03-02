@@ -6,15 +6,12 @@ from .forms import RoomCreationForm, MessageForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import StyledUserCreationForm, RoomRenameForm
 from django.contrib import messages
-from channels.db import database_sync_to_async
-from chat.consumers import ChatConsumer
-from channels.layers import get_channel_layer
 
 
 @login_required
 def group_chat(request):
     rooms = Room.objects.all()
-    return render(request, 'chat/group_chat.html', {'rooms': rooms})
+    return render(request, 'group_chat.html', {'rooms': rooms})
 
 
 @login_required
@@ -28,7 +25,7 @@ def create_room(request):
     else:
         form = RoomCreationForm()
 
-    return render(request, 'chat/create_room.html',
+    return render(request, 'create_room.html',
                   {'form': form})
 
 
@@ -44,7 +41,7 @@ def rename_room(request, room_id):
     else:
         form = RoomRenameForm(instance=room)
 
-    return render(request, 'chat/rename_room.html',
+    return render(request, 'rename_room.html',
                   {'form': form, 'room': room})
 
 
@@ -56,7 +53,7 @@ def delete_room(request, room_id):
         room.delete()
         return redirect('group_chat')
 
-    return render(request, 'chat/delete_room.html', {'room': room})
+    return render(request, 'delete_room.html', {'room': room})
 
 
 @login_required
@@ -79,7 +76,7 @@ def chat_room(request, room_id):
     else:
         message_form = MessageForm()
 
-    return render(request, 'chat/chat_room.html',
+    return render(request, 'chat_room.html',
                   {'room': room, 'messages': messages,
                    'message_form': message_form})
 
@@ -99,7 +96,7 @@ def user_login(request):
         else:
             messages.error(request, "Invalid login details given")
 
-    return render(request, 'chat/login.html',
+    return render(request, 'login.html',
                   {'messages': messages.get_messages(request)})
 
 
@@ -119,4 +116,4 @@ def user_register(request):
     else:
         form = StyledUserCreationForm()
 
-    return render(request, 'chat/register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
